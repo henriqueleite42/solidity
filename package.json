@@ -1,0 +1,7 @@
+{
+  "name": "solidity",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Henrique Leite <henriqueleite616@gmail.com>",
+  "license": "MIT"
+}
