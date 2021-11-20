@@ -4,7 +4,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 /**
  * @title Owner
- * @dev Set & change owner
+ * Set & change owner
  */
 contract Owner {
 	address private owner;
@@ -24,29 +24,29 @@ contract Owner {
 	}
 
 	/**
-		* @dev Set contract deployer as owner
-		*/
+	 * Set contract deployer as owner
+	 */
 	constructor() {
 		owner = msg.sender; // 'msg.sender' is sender of current call, contract deployer for a constructor
 		emit OwnerSet(address(0), owner);
 	}
 
 	/**
-		* @dev Change owner
-		* @param newOwner address of new owner
-		*/
+	 * Change owner
+	 *
+	 * @param newOwner address of new owner
+	 */
 	function changeOwner(address newOwner) public isOwner {
-		require(msg.sender != owner, "Only the owner can change the current owner");
-
 		emit OwnerSet(owner, newOwner);
 
 		owner = newOwner;
 	}
 
 	/**
-		* @dev Return owner address
-		* @return address of owner
-		*/
+	 * Return owner address
+	 *
+	 * @return address of owner
+	 */
 	function getOwner() external view returns (address) {
 		return owner;
 	}

@@ -8,19 +8,18 @@ pragma solidity >=0.7.0 <0.9.0;
  * Implements voting process along with vote delegation
  */
 contract Election {
-
 	struct Voter {
-		uint weight; // weight is accumulated by delegation
-		bool voted;  // if true, that person already voted
+		uint256 weight; // weight is accumulated by delegation
+		bool voted; // if true, that person already voted
 		address delegate; // person delegated to
-		uint vote;   // index of the voted candidate
+		uint256 vote; // index of the voted candidate
 	}
 
 	struct Candidate {
 		// If you can limit the length to a certain number of bytes,
 		// always use one of bytes1 to bytes32 because they are much cheaper
-		bytes32 name;   // short name (up to 32 bytes)
-		uint voteCount; // number of accumulated votes
+		bytes32 name; // short name (up to 32 bytes)
+		uint256 voteCount; // number of accumulated votes
 	}
 
 	address public chairperson;
@@ -32,21 +31,19 @@ contract Election {
 	Candidate[] public candidates;
 
 	/**
-		* Create a new ballot to choose one of 'candidateNames'.
-		*
-		* @param candidateNames names of candidates
-		*/
-	constructor(bytes32[] memory candidateNames, address[] memory votersAdresses) {
+	 * Create a new ballot to choose one of 'candidateNames'.
+	 *
+	 * @param candidateNames names of candidates
+	 */
+	constructor(bytes32[] memory candidateNames, address[] memory votersAdresses)
+	{
 		chairperson = msg.sender;
 
 		/**
 		 * Define the candidates
 		 */
-		for (uint i = 0; i < candidateNames.length; i++) {
-			candidates.push(Candidate({
-				name: candidateNames[i],
-				voteCount: 0
-			}));
+		for (uint256 i = 0; i < candidateNames.length; i++) {
+			candidates.push(Candidate({name: candidateNames[i], voteCount: 0}));
 		}
 
 		/**
@@ -54,16 +51,16 @@ contract Election {
 		 */
 		voters[chairperson].weight = 1;
 
-		for (uint i = 0; i < votersAdresses.length; i++) {
+		for (uint256 i = 0; i < votersAdresses.length; i++) {
 			voters[votersAdresses[i]].weight = 1;
 		}
 	}
 
 	/**
-		* Delegate your vote to the voter 'to'.
-		*
-		* @param to address to which vote is delegated
-		*/
+	 * Delegate your vote to the voter 'to'.
+	 *
+	 * @param to address to which vote is delegated
+	 */
 	function delegate(address to) public {
 		require(closed, "Election has already been closed.");
 
@@ -119,12 +116,12 @@ contract Election {
 	}
 
 	/**
-		* Give your vote (including votes delegated to you) to
-		* candidate 'candidates[candidate].name'.
-		*
-		* @param candidate index of candidate in the candidates array
-		*/
-	function vote(uint candidate) public {
+	 * Give your vote (including votes delegated to you) to
+	 * candidate 'candidates[candidate].name'.
+	 *
+	 * @param candidate index of candidate in the candidates array
+	 */
+	function vote(uint256 candidate) public {
 		require(closed, "Election has already been closed.");
 
 		Voter storage sender = voters[msg.sender];
@@ -145,17 +142,17 @@ contract Election {
 	}
 
 	/**
-		* Closes the election and computes the winning candidate taking
-		* all previous votes into account.
-		*
-		* @return winnerName_ name of winning candidate in the candidates array
-		*/
+	 * Closes the election and computes the winning candidate taking
+	 * all previous votes into account.
+	 *
+	 * @return winnerName_ name of winning candidate in the candidates array
+	 */
 	function result() public returns (bytes32 winnerName_) {
 		closed = true;
 
-		uint winningCandidate = 0;
-		uint winningVoteCount = 0;
-		for (uint p = 0; p < candidates.length; p++) {
+		uint256 winningCandidate = 0;
+		uint256 winningVoteCount = 0;
+		for (uint256 p = 0; p < candidates.length; p++) {
 			if (candidates[p].voteCount > winningVoteCount) {
 				winningVoteCount = candidates[p].voteCount;
 				winningCandidate = p;
